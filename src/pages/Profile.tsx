@@ -5,7 +5,7 @@ import BottomNavigation from '@/components/BottomNavigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Settings, LogOut, Moon, Sun, Github, Shield, Wallet, Clock, Compass } from 'lucide-react';
+import { Settings, LogOut, Moon, Sun, Github, Shield, Wallet, Clock, Compass, Bell } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 const Profile = () => {
