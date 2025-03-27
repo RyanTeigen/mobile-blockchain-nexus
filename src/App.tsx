@@ -10,12 +10,14 @@ import Notifications from "./pages/Notifications";
 import Profile from "./pages/Profile";
 import Repository from "./pages/Repository";
 import NotFound from "./pages/NotFound";
+import Stars from "./components/Stars";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      <Stars />
       <Toaster />
       <Sonner />
       <BrowserRouter>

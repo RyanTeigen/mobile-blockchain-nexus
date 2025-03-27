@@ -45,12 +45,14 @@
   body {
     @apply bg-devhub-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+    position: relative;
+    overflow-x: hidden;
   }
 }
 
 @layer components {
   .mobile-container {
-    @apply mx-auto px-4 max-w-md w-full;
+    @apply mx-auto px-4 max-w-md w-full relative z-10;
   }
 
   .nav-item {
