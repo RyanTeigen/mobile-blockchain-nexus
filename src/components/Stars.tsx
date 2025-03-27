@@ -47,13 +47,13 @@ const Stars: React.FC = () => {
         ctx.fillStyle = `rgba(139, 92, 246, ${star.opacity})`;
         ctx.fill();
         
-        // Move stars
-        star.y += star.speed;
+        // Move stars to the right
+        star.x += star.speed;
         
         // Reset stars that move off screen
-        if (star.y > canvas.height) {
-          star.y = 0;
-          star.x = Math.random() * canvas.width;
+        if (star.x > canvas.width) {
+          star.x = 0;
+          star.y = Math.random() * canvas.height;
         }
       });
       
