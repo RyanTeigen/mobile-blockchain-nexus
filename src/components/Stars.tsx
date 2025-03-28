@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 
 const Stars: React.FC = () => {
@@ -44,7 +43,7 @@ const Stars: React.FC = () => {
       stars.forEach(star => {
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(139, 92, 246, ${star.opacity})`;
+        ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
         ctx.fill();
         
         // Move stars to the right
