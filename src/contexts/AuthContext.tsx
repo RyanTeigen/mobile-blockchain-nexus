@@ -1,18 +1,19 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { ethers } from 'ethers';
+import { toast } from '@/hooks/use-toast';
 
 type User = {
   id: string;
-  name: string;
-  email: string;
+  address: string;
+  name?: string;
 };
 
 type AuthContextType = {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  signup: (name: string, email: string, password: string) => Promise<void>;
+  connectWallet: () => Promise<void>;
   logout: () => void;
 };
 
@@ -31,45 +32,49 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLoading(false);
   }, []);
 
-  const login = async (email: string, password: string) => {
-    // In a real app, this would make an API call
+  const connectWallet = async () => {
     setIsLoading(true);
     try {
-      // Mock login - replace with real API call
-      const mockUser = {
-        id: '1',
-        name: email.split('@')[0],
-        email,
-      };
-      
-      // Store user in local storage
-      localStorage.setItem('devhub_user', JSON.stringify(mockUser));
-      setUser(mockUser);
-    } catch (error) {
-      console.error('Login error:', error);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      // Check if window.ethereum exists
+      if (!window.ethereum) {
+        toast({
+          title: "No wallet detected",
+          description: "Please install MetaMask or another browser wallet to continue",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
 
-  const signup = async (name: string, email: string, password: string) => {
-    // In a real app, this would make an API call
-    setIsLoading(true);
-    try {
-      // Mock signup - replace with real API call
-      const mockUser = {
-        id: '1',
-        name,
-        email,
+      // Request wallet connection
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const accounts = await provider.send("eth_requestAccounts", []);
+      
+      if (accounts.length === 0) {
+        throw new Error("No accounts available");
+      }
+
+      const address = accounts[0];
+      const walletUser = {
+        id: address,
+        address: address,
       };
       
       // Store user in local storage
-      localStorage.setItem('devhub_user', JSON.stringify(mockUser));
-      setUser(mockUser);
+      localStorage.setItem('devhub_user', JSON.stringify(walletUser));
+      setUser(walletUser);
+      
+      toast({
+        title: "Wallet connected",
+        description: "Successfully connected to your wallet",
+      });
     } catch (error) {
-      console.error('Signup error:', error);
-      throw error;
+      console.error('Wallet connection error:', error);
+      toast({
+        title: "Connection failed",
+        description: "Failed to connect to your wallet. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -86,8 +91,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         user,
         isAuthenticated: !!user,
         isLoading,
-        login,
-        signup,
+        connectWallet,
         logout,
       }}
     >
